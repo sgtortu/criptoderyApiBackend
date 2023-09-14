@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { createNewUserService, deleteOneUserService, getAllUsersService, getOneUserService, updateOneUserService } from "../services/userService";
 
-export const getAllUsersController = (_req: Request, res: Response) => {
-    const allUsers = getAllUsersService();
+export const getAllUsersController = async (_req: Request, res: Response) => {
+    const allUsers = await getAllUsersService();
     res.send({status: 'OK', data: allUsers});
 };
 
@@ -21,7 +21,8 @@ export const createNewUserController = (req: Request, res: Response) => {
     const { body } = req;
 
     if (
-        !body.username ||        
+        !body.name ||        
+        !body.lastname ||        
         !body.email ||        
         !body.password        
     ) {
@@ -29,7 +30,8 @@ export const createNewUserController = (req: Request, res: Response) => {
     }
 
     const newUser = {
-        username: body.username,
+        name: body.name,
+        lastname: body.lastname,
         email: body.email,
         password: body.password,
     }

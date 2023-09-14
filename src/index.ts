@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-const v1UserRouter = require('../src/v1/routes/userRoutes');
+import { router as v1UserRouter } from './v1/routes/userRoutes';
 
 dotenv.config();
 const app = express();
