@@ -7,12 +7,10 @@ import {
     deleteOneUserController
 } from "../../controllers/userController";
 
-const router = express.Router();
+export const router = express.Router();
 router
     .get('/', getAllUsersController)
     .get('/:userId', getOneUserController)
     .post('/', createNewUserController)
     .patch('/:userId', updateOneUserController)
     .delete('/:userId', deleteOneUserController);
-
-module.exports = router;

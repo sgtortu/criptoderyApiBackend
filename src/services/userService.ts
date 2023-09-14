@@ -1,10 +1,15 @@
-import { createNewUser, deleteOneUser, getAllUsers, getOneUser, updateOneUser } from "../database/User";
+import { createNewUser, deleteOneUser, getAllUsers, getOneUser, updateOneUser } from "../database/User/User";
+import { User } from "../models/User";
 
 const {v4: uuid} = require('uuid');
 
-export const getAllUsersService = () => {
-    const allUsers = getAllUsers();
-    return allUsers;
+export const getAllUsersService = async () => {
+    try {
+        const allUsers = await getAllUsers();        
+        return allUsers;
+    } catch (error) {
+        console.log(error)
+    }
 };
 
 export const getOneUserService = (userId: string) => {
@@ -12,12 +17,15 @@ export const getOneUserService = (userId: string) => {
     return user;
 };
 
-export const createNewUserService = (newUser: any) => {
-    const userToInsert = {
+export const createNewUserService = (newUser: User) => {
+    const userToInsert: User = {
         ...newUser,
         id: uuid(),
-        createdAt: new Date().toLocaleString("en-US", {timeZone: "UTC"}),
-        updatedAt: new Date().toLocaleString("en-US", {timeZone: "UTC"}),
+        createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+        updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+        isDeleted: 0,
+        status: 1,
+        role: '1',
     };  
     const createdUser = createNewUser(userToInsert);
     return createdUser;

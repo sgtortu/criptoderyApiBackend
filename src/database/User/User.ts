@@ -1,8 +1,21 @@
-const DB = require('./db.json');
-const { saveToDatabase } = require('./utils');
+import { User } from "../../models/User";
+import { connection } from "../config";
+import { userQueries } from "./userQueries";
+
+const DB = require('../db.json');
+const { saveToDatabase } = require('../utils');
 
 export const getAllUsers = () => {
-    return DB.users;
+    return new Promise((resolve, reject) => {
+        connection.query(userQueries.selectAll(), (error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                console.log('result', result)
+                resolve(result);
+            }
+        });
+    });
 };
 
 export const getOneUser = (userId: string) => {
@@ -12,15 +25,8 @@ export const getOneUser = (userId: string) => {
     return user;
 };
 
-export const createNewUser = (newUser: any) => {
-
-    const isAlreadyAdded = DB.users.findIndex(
-        (user: any) => user.username === newUser.username
-    ) > -1;
-    if (isAlreadyAdded) return;
-
-    DB.users.push(newUser);
-    saveToDatabase(DB);
+export const createNewUser = (newUser: User) => {
+    connection.query(userQueries.create(newUser));
     return newUser;
 };
 
