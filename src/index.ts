@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
+import dotenv from 'dotenv';
 const v1UserRouter = require('../src/v1/routes/userRoutes');
-const dotenv = require('dotenv');
 
 dotenv.config();
 const app = express();

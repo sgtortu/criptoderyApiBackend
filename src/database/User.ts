@@ -1,20 +1,21 @@
 const DB = require('./db.json');
 const { saveToDatabase } = require('./utils');
 
-const getAllUsers = () => {
+export const getAllUsers = () => {
     return DB.users;
 };
 
-const getOneUser = (userId) => {
-    const user = DB.users.find((user) => user.id === userId);
+export const getOneUser = (userId: string) => {
+    const user = DB.users.find((user: any) => user.id === userId);
     if (!user) return;
 
     return user;
 };
 
-const createNewUser = (newUser) => {
+export const createNewUser = (newUser: any) => {
+
     const isAlreadyAdded = DB.users.findIndex(
-        (user) => user.username === newUser.username
+        (user: any) => user.username === newUser.username
     ) > -1;
     if (isAlreadyAdded) return;
 
@@ -23,9 +24,9 @@ const createNewUser = (newUser) => {
     return newUser;
 };
 
-const updateOneUser = (userId, changes) => {
+export const updateOneUser = (userId: string, changes: any) => {
     const indexForUpdated = DB.users.findIndex(
-        (user) => user.id === userId
+        (user: any) => user.id === userId
     );
     if (indexForUpdated === -1) return;
     
@@ -40,21 +41,12 @@ const updateOneUser = (userId, changes) => {
     return updatedUser;
 };
 
-const deleteOneUser = (userId) => {
-    console.log('database')
+export const deleteOneUser = (userId: string) => {
     const indexForDeleted = DB.users.findIndex(
-        (user) => user.id === userId
+        (user: any) => user.id === userId
     );
     if (indexForDeleted === -1) return;
 
     DB.users.splice(indexForDeleted, 1);
     saveToDatabase(DB);
-};
-
-module.exports = {
-    getAllUsers,
-    createNewUser,
-    getOneUser,
-    updateOneUser,
-    deleteOneUser
 };

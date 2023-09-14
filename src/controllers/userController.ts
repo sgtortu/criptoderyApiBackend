@@ -1,22 +1,23 @@
-const userService = require('../services/userService');
+import { Request, Response } from "express";
+import { createNewUserService, deleteOneUserService, getAllUsersService, getOneUserService, updateOneUserService } from "../services/userService";
 
-const getAllUsers = (req, res) => {
-    const allUsers = userService.getAllUsers();
+export const getAllUsersController = (_req: Request, res: Response) => {
+    const allUsers = getAllUsersService();
     res.send({status: 'OK', data: allUsers});
 };
 
-const getOneUser = (req, res) => {
+export const getOneUserController = (req: Request, res: Response) => {
     const {
         params: { userId },
     } = req;
 
     if (!userId) return;
 
-    const user = userService.getOneUser(userId);
+    const user = getOneUserService(userId);
     res.send({status: 'OK', data: user});
 };
 
-const createNewUser = (req, res) => {
+export const createNewUserController = (req: Request, res: Response) => {
     const { body } = req;
 
     if (
@@ -33,11 +34,11 @@ const createNewUser = (req, res) => {
         password: body.password,
     }
 
-    const createdUser = userService.createNewUser(newUser);
+    const createdUser = createNewUserService(newUser);
     res.status(201).send({status: 'OK', data: createdUser});
 };
 
-const updateOneUser = (req, res) => {
+export const updateOneUserController = (req: Request, res: Response) => {
     const { 
         body, 
         params: { userId},
@@ -45,11 +46,11 @@ const updateOneUser = (req, res) => {
 
     if (!userId) return;
 
-    const updatedUser = userService.updateOneUser(userId, body);
+    const updatedUser = updateOneUserService(userId, body);
     res.send({status: 'OK', data: updatedUser});
 };
 
-const deleteOneUser = (req, res) => {
+export const deleteOneUserController = (req: Request, res: Response) => {
     const { 
         params: { userId },
     } = req;
@@ -57,14 +58,6 @@ const deleteOneUser = (req, res) => {
     if (!userId) return;
     console.log('controller')
 
-    userService.deleteOneUser(userId);
+    deleteOneUserService(userId);
     res.status(204).send({status: 'OK'});
-};
-
-module.exports = {
-    getAllUsers,
-    getOneUser,
-    createNewUser,
-    updateOneUser,
-    deleteOneUser,
 };
