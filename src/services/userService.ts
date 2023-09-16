@@ -8,7 +8,7 @@ export const getAllUsersService = async () => {
         const allUsers = await getAllUsers();        
         return allUsers;
     } catch (error) {
-        console.log(error)
+        return error;
     }
 };
 
