@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { router as v1UserRouter } from './v1/routes/userRoutes';
+const { swaggerDocs: V1SwaggerDocs } = require("./v1/swagger");
 
 dotenv.config();
 const app = express();
@@ -11,4 +12,5 @@ app.use('/api/v1/users', v1UserRouter);
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}.`);
+    V1SwaggerDocs(app, PORT);
 })
