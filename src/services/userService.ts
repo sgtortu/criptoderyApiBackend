@@ -1,41 +1,54 @@
-import { createNewUser, deleteOneUser, getAllUsers, getOneUser, updateOneUser } from "../database/User/User";
-import { User } from "../models/User";
+import { PrismaClient } from "@prisma/client";
 
 const {v4: uuid} = require('uuid');
+const prisma = new PrismaClient();
 
 export const getAllUsersService = async () => {
     try {
-        const allUsers = await getAllUsers();        
+        const allUsers = await prisma.user.findMany();   
         return allUsers;
     } catch (error) {
         return error;
     }
 };
 
-export const getOneUserService = (userId: string) => {
-    const user = getOneUser(userId);
-    return user;
+export const getOneUserService = async (userId: string) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: userId }
+        });
+        return user;
+    } catch (error) {
+        return error;
+    }
 };
 
-export const createNewUserService = (newUser: User) => {
-    const userToInsert: User = {
+export const createNewUserService = async (newUser: any) => {
+    const userToInsert: any = {
         ...newUser,
         id: uuid(),
-        createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
-        updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
-        isDeleted: 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        isDeleted: false,
         status: 1,
         role: '1',
     };  
-    const createdUser = createNewUser(userToInsert);
-    return createdUser;
+    try {
+        const createdUser = await prisma.user.create({data: userToInsert});
+        return createdUser;
+    } catch (error) {
+        return error;
+    }
 };
 
-export const updateOneUserService = (userId: string, changes: any) => {
-    const updatedUser = updateOneUser(userId, changes); 
+export const updateOneUserService = async (userId: string, changes: any) => {
+    const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: changes,
+    }); 
     return updatedUser;
 };
 
-export const deleteOneUserService = (userId: string) => {
-    deleteOneUser(userId);
+export const deleteOneUserService = async (userId: string) => {
+    await prisma.user.delete({ where: { id: userId }});
 };
