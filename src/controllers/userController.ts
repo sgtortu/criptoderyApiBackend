@@ -18,7 +18,7 @@ export const getAllUsersController = async (_req: Request, res: Response) => {
   }
 };
 
-export const getOneUserController = (req: Request, res: Response) => {
+export const getOneUserController = async (req: Request, res: Response) => {
   const {
     params: { userId },
   } = req;
@@ -33,7 +33,7 @@ export const getOneUserController = (req: Request, res: Response) => {
   }
 
   try {
-    const user = getOneUserService(userId);
+    const user = await getOneUserService(userId);
     res.send({ status: "OK", data: user });
   } catch (error: any) {
     res
@@ -42,7 +42,7 @@ export const getOneUserController = (req: Request, res: Response) => {
   }
 };
 
-export const createNewUserController = (req: Request, res: Response) => {
+export const createNewUserController = async (req: Request, res: Response) => {
   const { body } = req;
 
   if (!body.name || !body.lastname || !body.email || !body.password) {
@@ -63,7 +63,7 @@ export const createNewUserController = (req: Request, res: Response) => {
   };
 
   try {
-    const createdUser = createNewUserService(newUser);
+    const createdUser = await createNewUserService(newUser);
     res.status(201).send({ status: "OK", data: createdUser });
   } catch (error: any) {
     res
@@ -72,7 +72,7 @@ export const createNewUserController = (req: Request, res: Response) => {
   }
 };
 
-export const updateOneUserController = (req: Request, res: Response) => {
+export const updateOneUserController = async (req: Request, res: Response) => {
   const {
     body,
     params: { userId },
@@ -88,7 +88,7 @@ export const updateOneUserController = (req: Request, res: Response) => {
   }
 
   try {
-    const updatedUser = updateOneUserService(userId, body);
+    const updatedUser = await updateOneUserService(userId, body);
     res.send({ status: "OK", data: updatedUser });
   } catch (error: any) {
     res
@@ -97,7 +97,7 @@ export const updateOneUserController = (req: Request, res: Response) => {
   }
 };
 
-export const deleteOneUserController = (req: Request, res: Response) => {
+export const deleteOneUserController = async (req: Request, res: Response) => {
   const {
     params: { userId },
   } = req;
@@ -112,7 +112,7 @@ export const deleteOneUserController = (req: Request, res: Response) => {
   }
 
   try {
-    deleteOneUserService(userId);
+    await deleteOneUserService(userId);
     res.status(204).send({ status: "OK" });
   } catch (error: any) {
     res
