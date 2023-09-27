@@ -24,6 +24,12 @@ export const getOneUserService = async (userId: string) => {
 };
 
 export const createNewUserService = async (newUser: any) => {
+
+    const userExist = await prisma.user.findMany({
+        where: { email: newUser.email }
+    });
+    if (userExist.length) throw { message: "User Already Exist.", status: 409 };
+
     const userToInsert: any = {
         ...newUser,
         id: uuid(),

@@ -49,6 +49,6 @@ export const router = express.Router();
  */
 router.get('/', getAllUsersController);
 router.get('/:userId', getOneUserController);
-router.post('/', createNewUserController);
+router.post('/register', createNewUserController);
 router.patch('/:userId', updateOneUserController);
 router.delete('/:userId', deleteOneUserController);
