@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-
+const bcrypt = require('bcrypt');
 const {v4: uuid} = require('uuid');
 const prisma = new PrismaClient();
 
@@ -29,9 +29,11 @@ export const createNewUserService = async (newUser: any) => {
         where: { email: newUser.email }
     });
     if (userExist.length) throw { message: "User Already Exist.", status: 409 };
-
+    
+    const encryptedPassword = await bcrypt.hash(newUser.password, 10);
     const userToInsert: any = {
         ...newUser,
+        password: encryptedPassword,
         id: uuid(),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
