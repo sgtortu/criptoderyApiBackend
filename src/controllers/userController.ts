@@ -58,7 +58,7 @@ export const createNewUserController = async (req: Request, res: Response) => {
   const newUser = {
     name: body.name,
     lastname: body.lastname,
-    email: body.email,
+    email: body.email.toLowerCase(),
     password: body.password,
   };
 
