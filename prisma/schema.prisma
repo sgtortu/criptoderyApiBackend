@@ -27,6 +27,7 @@ model User {
   token           String @db.VarChar(250)
   // extra
   contents        Content[]
+  hitos           Hito[]     // Relación con la tabla intermedia "Hito"
 }
 
 model Content {
@@ -37,13 +38,13 @@ model Content {
   text        String?
   role        String?
   type        Int
-  visibility  Int
-  hidden      Boolean
-  isDeleted   Boolean
+  status      Int
   publisher   User       @relation(fields: [publisherId], references: [id])
   categoryId  Int?
   category    ContentCategory? @relation(fields: [categoryId], references: [id])
   publisherId String
+  // extra
+  hitos       Hito[]     // Relación con la tabla intermedia "Hito"
 }
 
 model ContentCategory {
@@ -53,5 +54,16 @@ model ContentCategory {
   icon      String?
   name      String?
   // extra
-  contents  Content[] 
+  contents  Content[]
 }
+
+model Hito {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime
+  updatedAt DateTime?
+  name      String
+  contents  Content[]
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+}
+
