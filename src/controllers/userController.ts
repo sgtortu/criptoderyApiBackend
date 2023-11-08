@@ -5,6 +5,7 @@ import {
   getAllUsersService,
   getOneUserService,
   updateOneUserService,
+  loginService,
 } from "../services/userService";
 
 export const getAllUsersController = async (_req: Request, res: Response) => {
@@ -58,7 +59,7 @@ export const createNewUserController = async (req: Request, res: Response) => {
   const newUser = {
     name: body.name,
     lastname: body.lastname,
-    email: body.email,
+    email: body.email.toLowerCase(),
     password: body.password,
   };
 
@@ -114,6 +115,23 @@ export const deleteOneUserController = async (req: Request, res: Response) => {
   try {
     await deleteOneUserService(userId);
     res.status(204).send({ status: "OK" });
+  } catch (error: any) {
+    res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+  }
+};
+
+export const loginController = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  if (!(email && password)) {
+    res.status(400).send("All input is required");
+  }
+
+  try {
+    const loggedUser = await loginService(email, password);
+    res.send({ status: "OK", data: loggedUser });
   } catch (error: any) {
     res
       .status(error?.status || 500)

@@ -4,9 +4,10 @@ import {
     getOneUserController, 
     createNewUserController,
     updateOneUserController,
-    deleteOneUserController
+    deleteOneUserController, 
+    loginController
 } from "../../controllers/userController";
-
+const auth = require("../../middleware/auth");
 export const router = express.Router();
 
 /**
@@ -47,8 +48,9 @@ export const router = express.Router();
  *                       type: string 
  *                       example: "Some error message"
  */
-router.get('/', getAllUsersController);
-router.get('/:userId', getOneUserController);
-router.post('/', createNewUserController);
-router.patch('/:userId', updateOneUserController);
-router.delete('/:userId', deleteOneUserController);
+router.get('/', auth, getAllUsersController);
+router.get('/:userId', auth, getOneUserController);
+router.post('/register', createNewUserController);
+router.patch('/:userId', auth, updateOneUserController);
+router.delete('/:userId', auth, deleteOneUserController);
+router.post('/login', loginController);
