@@ -32,7 +32,7 @@ model User {
 }
 
 model Card {
-  id          String     @id
+  id        Int       @id @default(autoincrement())
   createdAt   DateTime
   updatedAt   DateTime?
   title       String?
@@ -40,11 +40,11 @@ model Card {
   role        String?
   type        Int
   status      Int
-  publisher   User       @relation(fields: [publisherId], references: [id])
+  user   User       @relation(fields: [userId], references: [id])
   // relation
-  nodeId  Int?
-  node    Node? @relation(fields: [nodeId], references: [id])
-  publisherId String
+  nodeId  Int
+  node    Node @relation(fields: [nodeId], references: [id])
+  userId String
 }
 
 model Node {
