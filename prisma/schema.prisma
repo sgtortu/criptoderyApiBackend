@@ -25,12 +25,13 @@ model User {
   profileImageUrl String?
   password        String
   token           String @db.VarChar(250)
-  // extra
-  contents        Content[]
-  hitos           Hito[]     // Relación con la tabla intermedia "Hito"
+  // relation
+  cards           Card[]
+  nodes           Node[]
+  blocks          Block[]
 }
 
-model Content {
+model Card {
   id          String     @id
   createdAt   DateTime
   updatedAt   DateTime?
@@ -40,29 +41,34 @@ model Content {
   type        Int
   status      Int
   publisher   User       @relation(fields: [publisherId], references: [id])
-  categoryId  Int?
-  category    ContentCategory? @relation(fields: [categoryId], references: [id])
+  // relation
+  nodeId  Int?
+  node    Node? @relation(fields: [nodeId], references: [id])
   publisherId String
-  // extra
-  hitos       Hito[]     // Relación con la tabla intermedia "Hito"
 }
 
-model ContentCategory {
+model Node {
   id        Int       @id @default(autoincrement())
   createdAt DateTime
   updatedAt DateTime?
   icon      String?
   name      String?
-  // extra
-  contents  Content[]
+  // relation
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  blockId  Int?
+  block    Block? @relation(fields: [blockId], references: [id])
+  cards  Card[]
 }
 
-model Hito {
+model Block {
   id        Int      @id @default(autoincrement())
   createdAt DateTime
   updatedAt DateTime?
   name      String
-  contents  Content[]
+  icon      String?
+  // relation
+  nodes     Node[]
   userId    String
   user      User     @relation(fields: [userId], references: [id])
 }
