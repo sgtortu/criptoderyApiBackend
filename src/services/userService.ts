@@ -65,7 +65,10 @@ export const createNewUserService = async (newUser: any) => {
 export const updateOneUserService = async (userId: string, changes: any) => {
     const updatedUser = await prisma.user.update({
         where: { id: userId },
-        data: changes,
+        data: {
+            ...changes,
+            updatedAt: new Date().toISOString(),
+        },
     }); 
     return updatedUser;
 };
